@@ -99,11 +99,13 @@ public class MainActivity extends FragmentActivity implements
 
                         // 1. Get the external storage directory
                         File mediaStorageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                        Log.d(TAG, mediaStorageDir.toString() + " media storage string");
 
                         // 2. Create a unique file name
                         String fileName = "";
                         String fileType = "";
                         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                        Log.d(TAG, timeStamp.toString() + " media storage string");
 
                         if (mediaType == MEDIA_TYPE_IMAGE) {
                             fileName = "IMG_" + timeStamp;
@@ -130,16 +132,19 @@ public class MainActivity extends FragmentActivity implements
                     }
 
                     // something went wrong
+                    Log.d(TAG, "error & returning null");
                     return null;
                 }
 
                 private boolean isExternalStorageAvailable() {
                     String state = Environment.getExternalStorageState();
 
-                    if (!state.equals(Environment.MEDIA_MOUNTED)) {
+                    if (state.equals(Environment.MEDIA_MOUNTED)) {
                         return true;
                     } else {
+                        Log.d(TAG, Environment.getExternalStorageState().toString());
                         return false;
+
                     }
                 }
             };
@@ -160,23 +165,10 @@ public class MainActivity extends FragmentActivity implements
     ViewPager mViewPager;
 
     @Override
-    protected void onStart() {
-        super.onStart();
-//        User currentUser = User.getCurrentUser();
-//        if (currentUser == null) {
-        Log.d(TAG, "running");
-            navigateToLogin();
-//        } else {
-//            Log.i(TAG, currentUser.getUsername());
-//        }
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
-        navigateToLogin();
+
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.activity_main);
 
 
         User currentUser = User.getCurrentUser();
@@ -187,19 +179,24 @@ public class MainActivity extends FragmentActivity implements
         }
         Log.i(TAG, "this is running");
         // Set up the action bar.
-        final ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the app.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(this,
+
+        if(User.getCurrentUser() == null){navigateToLogin();}
+        else{
+            setContentView(R.layout.activity_main);
+            mSectionsPagerAdapter = new SectionsPagerAdapter(this,
                 getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+            final ActionBar actionBar = getActionBar();
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        // When swiping between different sections, select the corresponding
+
+            // When swiping between different sections, select the corresponding
         // tab. We can also use ActionBar.Tab#select() to do this if we have
         // a reference to the Tab.
         mViewPager
@@ -219,6 +216,7 @@ public class MainActivity extends FragmentActivity implements
             actionBar.addTab(actionBar.newTab()
                     .setIcon(mSectionsPagerAdapter.getIcon(i))
                     .setTabListener(this));
+        }
         }
     }
 
@@ -269,14 +267,14 @@ public class MainActivity extends FragmentActivity implements
             Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
             recipientsIntent.setData(mMediaUri);
 
-            String fileType;
+            String fileType = null;
             if (requestCode == PICK_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST) {
-                //fileType = Message.TYPE_IMAGE;
+                fileType = Message.TYPE_IMAGE;
             } else {
-                //fileType = Message.TYPE_VIDEO;
+                fileType = Message.TYPE_VIDEO;
             }
 
-            //recipientsIntent.putExtra(Message.KEY_FILE_TYPE, fileType);
+            recipientsIntent.putExtra(Message.KEY_FILE_TYPE, fileType);
             startActivity(recipientsIntent);
         } else if (resultCode != RESULT_CANCELED) {
             Toast.makeText(this, R.string.general_error, Toast.LENGTH_LONG).show();
@@ -291,9 +289,12 @@ public class MainActivity extends FragmentActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        if (User.getCurrentUser() != null) {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.main, menu);
+            return true;
+        }
+        else return false;
     }
 
     @Override

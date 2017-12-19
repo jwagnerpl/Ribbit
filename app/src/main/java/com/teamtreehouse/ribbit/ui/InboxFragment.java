@@ -26,26 +26,41 @@ public class InboxFragment extends ListFragment {
 
     protected List<Message> mMessages;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
+
     private static final String TAG = "InboxFragment";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        startActivity(new Intent(getContext(), LoginActivity.class));
+
+
+        //mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeRefreshLayout);
+        //Log.d(TAG, User.getCurrentUser().toString());
+        //if(User.getCurrentUser() == null){startActivity(new Intent(getContext(), LoginActivity.class));}
         View rootView = inflater.inflate(R.layout.fragment_inbox,
                 container, false);
-        Log.d(TAG, "we are in the inbox fragment");
-        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeRefreshLayout);
+        Log.d(TAG, mSwipeRefreshLayout.toString());
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+
         // Deprecated method - what should we call instead?
-        mSwipeRefreshLayout.setColorScheme(
+
+        mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.swipeRefresh1,
                 R.color.swipeRefresh2,
                 R.color.swipeRefresh3,
-                R.color.swipeRefresh4);
+                R.color.swipeRefresh4
+        );
 
         if(User.getCurrentUser() != null) {retrieveMessages();}
-        else{}
-        return rootView;
     }
 
     @Override
@@ -57,6 +72,7 @@ public class InboxFragment extends ListFragment {
 
     private void retrieveMessages() {
         Query<Message> query = Message.getQuery();
+        if(mSwipeRefreshLayout == null){mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeRefreshLayout);}
         query.whereEqualTo(Message.KEY_RECIPIENT_IDS, User.getCurrentUser().getObjectId());
         query.addDescendingOrder(Message.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Message>() {

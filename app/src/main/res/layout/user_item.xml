@@ -1,16 +1,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:focusable="false"
+    android:id="@+id/userItem"
+    android:clickable="false"
     android:background="@android:color/white" >
 
     <ImageView
         android:id="@+id/userImageView"
         style="@style/GridImage"
+        android:focusable="false"
         android:contentDescription="@string/content_desc_user_avatar"
         android:src="@drawable/avatar_empty" />
     
     <ImageView
         android:id="@+id/checkImageView"
+        android:focusable="false"
         style="@style/GridImage"
         android:contentDescription="@string/content_desc_user_checkmark"
         android:src="@drawable/avatar_selected"
@@ -18,6 +23,7 @@
 
     <TextView
         android:id="@+id/nameLabel"
+        android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="44dp"
         android:layout_alignParentLeft="true"

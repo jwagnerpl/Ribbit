@@ -169,7 +169,7 @@ public class RecipientsActivity extends Activity {
         if (fileBytes == null) {
             return null;
         } else {
-            if (mFileType.equals(Message.TYPE_IMAGE)) {
+            if (mFileType.toString().equals(Message.TYPE_IMAGE.toString())) {
                 fileBytes = FileHelper.reduceImageForUpload(fileBytes);
             }
 

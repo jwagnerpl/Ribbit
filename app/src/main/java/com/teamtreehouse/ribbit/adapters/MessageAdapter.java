@@ -1,6 +1,7 @@
 package com.teamtreehouse.ribbit.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 public class MessageAdapter extends ArrayAdapter<Message> {
-
+    private static final String TAG = "MessageAdapter";
     protected Context mContext;
     protected List<Message> mMessages;
 
@@ -36,14 +37,17 @@ public class MessageAdapter extends ArrayAdapter<Message> {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
-        if (convertView == null) {
+        if (convertView == null || convertView.getTag() == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.message_item, null);
             holder = new ViewHolder();
             holder.iconImageView = (ImageView) convertView.findViewById(R.id.messageIcon);
             holder.nameLabel = (TextView) convertView.findViewById(R.id.senderLabel);
             holder.timeLabel = (TextView) convertView.findViewById(R.id.timeLabel);
+            Log.d(TAG, "convertview was not null" );
         } else {
             holder = (ViewHolder) convertView.getTag();
+            Log.d(TAG, holder.toString());
+            Log.d(TAG, "convertview was null" );
         }
 
         Message message = mMessages.get(position);
@@ -52,7 +56,6 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         long now = new Date().getTime();
         SimpleDateFormat format = new SimpleDateFormat("EEE, MMM d");
         String convertedDate = format.format(createdAt);
-
         holder.timeLabel.setText(convertedDate);
 
         if (message.getString(Message.KEY_FILE_TYPE).equals(Message.TYPE_IMAGE)) {

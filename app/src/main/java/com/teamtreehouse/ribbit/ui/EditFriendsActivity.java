@@ -29,6 +29,7 @@ public class EditFriendsActivity extends Activity {
     protected Relation<User> mFriendsRelation;
     protected User mCurrentUser;
     protected GridView mGridView;
+    UserAdapter adapter;
 
     public static final String TAG = EditFriendsActivity.class.getSimpleName();
 
@@ -77,7 +78,7 @@ public class EditFriendsActivity extends Activity {
                         i++;
                     }
                     if (mGridView.getAdapter() == null) {
-                        UserAdapter adapter = new UserAdapter(EditFriendsActivity.this, mUsers);
+                        adapter = new UserAdapter(EditFriendsActivity.this, mUsers);
                         mGridView.setAdapter(adapter);
                     } else {
                         ((UserAdapter) mGridView.getAdapter()).refill(mUsers);
@@ -145,21 +146,28 @@ public class EditFriendsActivity extends Activity {
         });
     }
 
-    protected OnItemClickListener mOnItemClickListener = new OnItemClickListener() {
+
+    protected AdapterView.OnItemClickListener mOnItemClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             ImageView checkImageView = (ImageView) view.findViewById(R.id.checkImageView);
+            Log.d(TAG, "click reg");
+
 
             if (mGridView.isItemChecked(position)) {
+                Log.d(TAG, "Item check registered");
                 // add the friend
                 mFriendsRelation.add(mUsers.get(position));
-                checkImageView.setVisibility(View.INVISIBLE);
+
+                view.findViewById(R.id.checkImageView).setVisibility(View.INVISIBLE);
             } else {
                 // remove the friend
+                Log.d(TAG, "Item check unregistered");
                 mFriendsRelation.remove(mUsers.get(position));
                 checkImageView.setVisibility(View.VISIBLE);
             }
+                adapter.notifyDataSetChanged();
 
             mCurrentUser.saveInBackground(new SaveCallback() {
                 @Override

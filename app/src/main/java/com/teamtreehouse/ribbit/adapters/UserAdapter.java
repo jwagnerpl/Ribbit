@@ -1,9 +1,11 @@
 package com.teamtreehouse.ribbit.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -11,7 +13,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.teamtreehouse.ribbit.R;
+import com.teamtreehouse.ribbit.models.Relation;
 import com.teamtreehouse.ribbit.models.User;
+import com.teamtreehouse.ribbit.models.callbacks.SaveCallback;
 import com.teamtreehouse.ribbit.utils.MD5Util;
 
 import java.util.ArrayList;
@@ -21,6 +25,8 @@ public class UserAdapter extends ArrayAdapter<User> {
 
     protected Context mContext;
     protected List<User> mUsers;
+
+
 
     public UserAdapter(Context context, List<User> users) {
         super(context, R.layout.message_item, users);
@@ -32,6 +38,8 @@ public class UserAdapter extends ArrayAdapter<User> {
             mUsers.add(user);
         }
     }
+
+    private static final String TAG = "UserAdapter";
 
     @Override
     public int getCount() {
