@@ -47,44 +47,45 @@ public class FriendsFragment extends Fragment {
         super.onResume();
 
         mCurrentUser = User.getCurrentUser();
-        mFriendsRelation = mCurrentUser.getRelation(User.KEY_FRIENDS_RELATION);
+        if (mCurrentUser != null) {
+            mFriendsRelation = mCurrentUser.getRelation(User.KEY_FRIENDS_RELATION);
 
-        getActivity().setProgressBarIndeterminateVisibility(true);
+            getActivity().setProgressBarIndeterminateVisibility(true);
 
 
-        Query<User> query = mFriendsRelation.getQuery();
-        query.addAscendingOrder(User.KEY_USER_ID);
-        query.findInBackground(new FindCallback<User>() {
-            @Override
-            public void done(List<User> friends, Exception e) {
-                getActivity().setProgressBarIndeterminateVisibility(false);
+            Query<User> query = mFriendsRelation.getQuery();
+            query.addAscendingOrder(User.KEY_USER_ID);
+            query.findInBackground(new FindCallback<User>() {
+                @Override
+                public void done(List<User> friends, Exception e) {
+                    getActivity().setProgressBarIndeterminateVisibility(false);
 
-                if (e == null) {
-                    mFriends = friends;
+                    if (e == null) {
+                        mFriends = friends;
 
-                    String[] usernames = new String[mFriends.size()];
-                    int i = 0;
-                    for (User user : mFriends) {
-                        usernames[i] = user.getUsername();
-                        i++;
-                    }
-                    if (mGridView.getAdapter() == null) {
-                        UserAdapter adapter = new UserAdapter(getActivity(), mFriends);
-                        mGridView.setAdapter(adapter);
+                        String[] usernames = new String[mFriends.size()];
+                        int i = 0;
+                        for (User user : mFriends) {
+                            usernames[i] = user.getUsername();
+                            i++;
+                        }
+                        if (mGridView.getAdapter() == null) {
+                            UserAdapter adapter = new UserAdapter(getActivity(), mFriends);
+                            mGridView.setAdapter(adapter);
+                        } else {
+                            ((UserAdapter) mGridView.getAdapter()).refill(mFriends);
+                        }
                     } else {
-                        ((UserAdapter) mGridView.getAdapter()).refill(mFriends);
+                        Log.e(TAG, e.getMessage());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage(e.getMessage())
+                                .setTitle(R.string.error_title)
+                                .setPositiveButton(android.R.string.ok, null);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
                     }
-                } else {
-                    Log.e(TAG, e.getMessage());
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setMessage(e.getMessage())
-                            .setTitle(R.string.error_title)
-                            .setPositiveButton(android.R.string.ok, null);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
                 }
-            }
-        });
+            });
+        }
     }
-
 }

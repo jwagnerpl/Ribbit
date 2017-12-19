@@ -169,6 +169,7 @@ public class MainActivity extends FragmentActivity implements
 
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        Log.d(TAG, User.getCurrentUser().toString());
 
 
         User currentUser = User.getCurrentUser();
@@ -283,8 +284,10 @@ public class MainActivity extends FragmentActivity implements
 
     private void navigateToLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         // change this intent so that the user can't hit "back" and get into the inbox
         startActivity(intent);
+        finish();
     }
 
     @Override

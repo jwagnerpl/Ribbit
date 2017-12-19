@@ -1,5 +1,7 @@
 package com.teamtreehouse.ribbit.models;
 
+import android.util.Log;
+
 import com.teamtreehouse.ribbit.mockdata.MockRelations;
 import com.teamtreehouse.ribbit.mockdata.MockUsers;
 import com.teamtreehouse.ribbit.models.callbacks.LogInCallback;
@@ -9,7 +11,7 @@ import com.teamtreehouse.ribbit.models.callbacks.SignUpCallback;
 import java.util.UUID;
 
 public class User implements Comparable<User> {
-
+    private static final String TAG = "User";
     // Field names
     public static final String KEY_USER_ID = "userId";
     public static final String KEY_USERNAME = "username";
@@ -95,6 +97,7 @@ public class User implements Comparable<User> {
 
     public static void logOut() {
         currentUser = null;
+        Log.d(TAG, "current user is null");
     }
 
     public static User getCurrentUser() {
