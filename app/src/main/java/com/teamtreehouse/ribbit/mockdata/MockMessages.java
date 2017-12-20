@@ -1,6 +1,7 @@
 package com.teamtreehouse.ribbit.mockdata;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.RibbitApplication;
@@ -14,7 +15,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public class MockMessages {
-
+    private static final String TAG = "MockMessages";
     private static MockMessages instance = null;
     private ArrayList<Message> allMessages;
 
@@ -24,6 +25,7 @@ public class MockMessages {
         if (instance == null) {
             instance = new MockMessages();
         }
+        Log.d(TAG, "returned existing instance");
         return instance;
     }
 
@@ -82,10 +84,15 @@ public class MockMessages {
 
     public boolean deleteMessage(UUID msgId) {
         for (Message msg : allMessages) {
+            Log.d(TAG, msg.getId().toString()+ "loop message");
+            Log.d(TAG, msgId.toString() + "my deleted id");
+
             if (msg.getId() == msgId) {
+                Log.d(TAG, "message finally deleted");
                 allMessages.remove(msg);
                 return true;
             }
+            else {Log.d(TAG, "message not deleted");}
         }
 
         return false;

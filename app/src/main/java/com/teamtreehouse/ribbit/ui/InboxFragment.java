@@ -10,10 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ListView;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.MessageAdapter;
+import com.teamtreehouse.ribbit.mockdata.MockMessages;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.MessageFile;
 import com.teamtreehouse.ribbit.models.Query;
@@ -93,6 +95,7 @@ public class InboxFragment extends ListFragment {
                     for (Message message : mMessages) {
                         usernames[i] = message.getString(Message.KEY_SENDER_NAME);
                         i++;
+                        Log.d(TAG,message.getId().toString());
                     }
                     if (getListView().getAdapter() == null) {
                         MessageAdapter adapter = new MessageAdapter(
@@ -135,10 +138,23 @@ public class InboxFragment extends ListFragment {
         if (ids.size() == 1) {
             // last recipient - delete the whole thing!
             message.deleteInBackground();
+            Log.d(TAG, "deleting message now");
+            //mMessages.remove(position);
+            //adapter.notifyDataSetChanged();
+            //Log.d(TAG,message.getId().toString());
+            //message.removeRecipient(User.getCurrentUser().getObjectId());
+
+
         }
         else {
             // remove the recipient
+            message.deleteInBackground();
+            MessageAdapter adapter = (MessageAdapter) getListView().getAdapter();
+            adapter.notifyDataSetChanged();
             message.removeRecipient(User.getCurrentUser().getObjectId());
+            message.deleteInBackground();
+
+
         }
     }
 

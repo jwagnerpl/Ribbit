@@ -1,6 +1,8 @@
 package com.teamtreehouse.ribbit.models;
 
 
+import android.util.Log;
+
 import com.teamtreehouse.ribbit.mockdata.MockMessages;
 import com.teamtreehouse.ribbit.models.callbacks.SaveCallback;
 
@@ -21,6 +23,7 @@ public class Message implements Comparable<Message> {
     public static final String KEY_FILE = "file";
     public static final String KEY_FILE_TYPE = "fileType";
     public static final String KEY_CREATED_AT = "createdAt";
+    private static final String TAG = "Message";
 
     public static final String TYPE_IMAGE = "image";
     public static final String TYPE_VIDEO = "video";
@@ -41,7 +44,6 @@ public class Message implements Comparable<Message> {
     }
 
     public UUID getId() {
-        id= UUID.randomUUID();
         return id;
     }
 
@@ -66,6 +68,7 @@ public class Message implements Comparable<Message> {
 
     public void deleteInBackground() {
         MockMessages.getInstance().deleteMessage(id);
+        Log.d(TAG, "deleting message with id " + id);
     }
 
     public void removeRecipient(String idToRemove) {
