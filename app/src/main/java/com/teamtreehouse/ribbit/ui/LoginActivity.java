@@ -32,9 +32,6 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         Log.d(TAG, "we are here in login activity");
 
-        ActionBar actionBar = getActionBar();
-        actionBar.hide();
-
         mSignUpTextView = (TextView) findViewById(R.id.signUpText);
         mSignUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -3,9 +3,11 @@ package com.teamtreehouse.ribbit.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +32,8 @@ public class InboxFragment extends ListFragment {
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
     private static final String TAG = "InboxFragment";
+    private FloatingActionButton fab;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,7 +51,6 @@ public class InboxFragment extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeRefreshLayout);
         Log.d(TAG, mSwipeRefreshLayout.toString());

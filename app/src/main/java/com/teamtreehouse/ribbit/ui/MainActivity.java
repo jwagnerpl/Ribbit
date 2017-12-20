@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -34,18 +35,16 @@ import java.util.Date;
 public class MainActivity extends FragmentActivity implements
         ActionBar.TabListener {
 
+    FloatingActionButton fab;
     public static final String TAG = MainActivity.class.getSimpleName();
 
     public static final int TAKE_PHOTO_REQUEST = 0;
     public static final int TAKE_VIDEO_REQUEST = 1;
     public static final int PICK_PHOTO_REQUEST = 2;
     public static final int PICK_VIDEO_REQUEST = 3;
-
     public static final int MEDIA_TYPE_IMAGE = 4;
     public static final int MEDIA_TYPE_VIDEO = 5;
-
     public static final int FILE_SIZE_LIMIT = 1024 * 1024 * 10; // 10 MB
-
     protected Uri mMediaUri;
 
     protected DialogInterface.OnClickListener mDialogListener =
