@@ -3,9 +3,11 @@ package com.teamtreehouse.ribbit.ui;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.teamtreehouse.ribbit.R;
@@ -26,15 +28,22 @@ public class ViewImageActivity extends Activity {
 
         Uri imageUri = getIntent().getData();
 
+        final TextView timerTextView = (TextView) findViewById(R.id.timer);
+
         Picasso.with(this).load(imageUri.toString()).into(imageView);
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
+        CountDownTimer cdt = new CountDownTimer(10000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                timerTextView.setText("Seconds Remaining: " + millisUntilFinished / 1000);
+                //here you can have your logic to set text to edittext
+            }
+
+            public void onFinish() {
                 finish();
             }
-        }, 10 * 1000);
+
+        }.start();
     }
 
     /**
@@ -45,6 +54,8 @@ public class ViewImageActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
