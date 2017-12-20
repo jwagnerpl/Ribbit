@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -39,10 +41,10 @@ public class RecipientsActivity extends Activity {
     protected Relation<User> mFriendsRelation;
     protected User mCurrentUser;
     protected List<User> mFriends;
-    protected MenuItem mSendMenuItem;
     protected Uri mMediaUri;
     protected String mFileType;
     protected GridView mGridView;
+    protected Button sendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +54,36 @@ public class RecipientsActivity extends Activity {
         // Show the Up button in the action bar.
         setupActionBar();
 
+        sendButton = (Button) findViewById(R.id.sendButton);
         mGridView = (GridView) findViewById(R.id.friendsGrid);
         mGridView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mGridView.setOnItemClickListener(mOnItemClickListener);
+
 
         TextView emptyTextView = (TextView) findViewById(android.R.id.empty);
         mGridView.setEmptyView(emptyTextView);
 
         mMediaUri = getIntent().getData();
         mFileType = getIntent().getExtras().getString(Message.KEY_FILE_TYPE);
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Message message = createMessage();
+                if (message == null) {
+                    // error
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RecipientsActivity.this);
+                    builder.setMessage(R.string.error_selecting_file)
+                            .setTitle(R.string.error_selecting_file_title)
+                            .setPositiveButton(android.R.string.ok, null);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else {
+                    send(message);
+                    finish();
+                }
+            }
+        });
     }
 
     @Override
@@ -118,14 +141,6 @@ public class RecipientsActivity extends Activity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.recipients, menu);
-        mSendMenuItem = menu.getItem(0);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -137,21 +152,6 @@ public class RecipientsActivity extends Activity {
                 // http://developer.android.com/design/patterns/navigation.html#up-vs-back
                 //
                 NavUtils.navigateUpFromSameTask(this);
-                return true;
-            case R.id.action_send:
-                Message message = createMessage();
-                if (message == null) {
-                    // error
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setMessage(R.string.error_selecting_file)
-                            .setTitle(R.string.error_selecting_file_title)
-                            .setPositiveButton(android.R.string.ok, null);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                } else {
-                    send(message);
-                    finish();
-                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -210,14 +210,17 @@ public class RecipientsActivity extends Activity {
         });
     }
 
+
     protected OnItemClickListener mOnItemClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             if (mGridView.getCheckedItemCount() > 0) {
-                mSendMenuItem.setVisible(true);
+                sendButton.setVisibility(View.VISIBLE);
+
             } else {
-                mSendMenuItem.setVisible(false);
+
+                sendButton.setVisibility(View.INVISIBLE);
             }
 
             ImageView checkImageView = (ImageView) view.findViewById(R.id.checkImageView);

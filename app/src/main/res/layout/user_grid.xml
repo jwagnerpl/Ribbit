@@ -2,24 +2,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusable="false"
-     >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:focusable="false">
 
     <GridView
         android:id="@+id/friendsGrid"
-        android:focusable="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:clipToPadding="false"
+        android:columnWidth="90dp"
+        android:focusable="false"
+        android:gravity="center"
         android:horizontalSpacing="@dimen/user_grid_spacing"
         android:numColumns="auto_fit"
-        android:columnWidth="90dp"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="@dimen/user_grid_spacing"
-        android:gravity="center"
-        android:layout_centerHorizontal="true" >
+        android:verticalSpacing="@dimen/user_grid_spacing">
+
     </GridView>
 
     <TextView
@@ -28,5 +29,23 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/empty_friends_label" />
+
+    <Button
+        android:id="@+id/sendButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/friendsGrid"
+        android:layout_alignEnd="@+id/friendsGrid"
+        android:visibility="invisible"
+        android:text="@string/send_message"
+        android:layout_marginEnd="10dp"
+        android:padding="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/apptheme_color"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+
+
+         />
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
@@ -11,5 +11,6 @@
     <dimen name="inbox_vertical_margin">8dp</dimen>
     <dimen name="message_vertical_padding">8dp</dimen>
     <dimen name="user_grid_spacing">8dp</dimen>
+
 
 </resources>
