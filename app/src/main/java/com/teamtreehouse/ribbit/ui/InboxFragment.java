@@ -95,7 +95,6 @@ public class InboxFragment extends ListFragment {
                     for (Message message : mMessages) {
                         usernames[i] = message.getString(Message.KEY_SENDER_NAME);
                         i++;
-                        Log.d(TAG,message.getId().toString());
                     }
                     if (getListView().getAdapter() == null) {
                         MessageAdapter adapter = new MessageAdapter(
@@ -139,8 +138,9 @@ public class InboxFragment extends ListFragment {
             // last recipient - delete the whole thing!
             message.deleteInBackground();
             Log.d(TAG, "deleting message now");
-            //mMessages.remove(position);
-            //adapter.notifyDataSetChanged();
+            mMessages.remove(position);
+            MessageAdapter adapter = (MessageAdapter) getListView().getAdapter();
+            adapter.notifyDataSetChanged();
             //Log.d(TAG,message.getId().toString());
             //message.removeRecipient(User.getCurrentUser().getObjectId());
 

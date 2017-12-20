@@ -22,6 +22,8 @@ import com.teamtreehouse.ribbit.adapters.SectionsPagerAdapter;
 import com.teamtreehouse.ribbit.models.Message;
 import com.teamtreehouse.ribbit.models.User;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -169,8 +171,7 @@ public class MainActivity extends FragmentActivity implements
 
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        Log.d(TAG, User.getCurrentUser().toString());
-
+        JodaTimeAndroid.init(this);
 
         User currentUser = User.getCurrentUser();
         if (currentUser == null) {
