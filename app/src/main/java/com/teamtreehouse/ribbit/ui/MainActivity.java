@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -35,16 +34,18 @@ import java.util.Date;
 public class MainActivity extends FragmentActivity implements
         ActionBar.TabListener {
 
-    FloatingActionButton fab;
     public static final String TAG = MainActivity.class.getSimpleName();
 
     public static final int TAKE_PHOTO_REQUEST = 0;
     public static final int TAKE_VIDEO_REQUEST = 1;
     public static final int PICK_PHOTO_REQUEST = 2;
     public static final int PICK_VIDEO_REQUEST = 3;
+
     public static final int MEDIA_TYPE_IMAGE = 4;
     public static final int MEDIA_TYPE_VIDEO = 5;
+
     public static final int FILE_SIZE_LIMIT = 1024 * 1024 * 10; // 10 MB
+
     protected Uri mMediaUri;
 
     protected DialogInterface.OnClickListener mDialogListener =
@@ -184,40 +185,41 @@ public class MainActivity extends FragmentActivity implements
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the app.
 
-        if(User.getCurrentUser() == null){navigateToLogin();}
-        else{
+        if (User.getCurrentUser() == null) {
+            navigateToLogin();
+        } else {
             setContentView(R.layout.activity_main);
             mSectionsPagerAdapter = new SectionsPagerAdapter(this,
-                getSupportFragmentManager());
+                    getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+            // Set up the ViewPager with the sections adapter.
+            mViewPager = (ViewPager) findViewById(R.id.pager);
+            mViewPager.setAdapter(mSectionsPagerAdapter);
             final ActionBar actionBar = getActionBar();
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 
             // When swiping between different sections, select the corresponding
-        // tab. We can also use ActionBar.Tab#select() to do this if we have
-        // a reference to the Tab.
-        mViewPager
-                .setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-                    @Override
-                    public void onPageSelected(int position) {
-                        actionBar.setSelectedNavigationItem(position);
-                    }
-                });
+            // tab. We can also use ActionBar.Tab#select() to do this if we have
+            // a reference to the Tab.
+            mViewPager
+                    .setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+                        @Override
+                        public void onPageSelected(int position) {
+                            actionBar.setSelectedNavigationItem(position);
+                        }
+                    });
 
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by
-            // the adapter. Also specify this Activity object, which implements
-            // the TabListener interface, as the callback (listener) for when
-            // this tab is selected.
-            actionBar.addTab(actionBar.newTab()
-                    .setIcon(mSectionsPagerAdapter.getIcon(i))
-                    .setTabListener(this));
-        }
+            // For each of the sections in the app, add a tab to the action bar.
+            for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+                // Create a tab with text corresponding to the page title defined by
+                // the adapter. Also specify this Activity object, which implements
+                // the TabListener interface, as the callback (listener) for when
+                // this tab is selected.
+                actionBar.addTab(actionBar.newTab()
+                        .setIcon(mSectionsPagerAdapter.getIcon(i))
+                        .setTabListener(this));
+            }
         }
     }
 
@@ -296,8 +298,7 @@ public class MainActivity extends FragmentActivity implements
             // Inflate the menu; this adds items to the action bar if it is present.
             getMenuInflater().inflate(R.menu.main, menu);
             return true;
-        }
-        else return false;
+        } else return false;
     }
 
     @Override

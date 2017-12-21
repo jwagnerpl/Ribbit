@@ -77,8 +77,11 @@ public class LoginActivity extends Activity {
                                 startActivity(intent);
                             } else {
                                 String errorM;
-                                if(e.getMessage() == null){errorM = "Try logging in again with the required credentials or sign up.";}
-                                else{errorM = e.getMessage();}
+                                if (e.getMessage() == null) {
+                                    errorM = "Try logging in again with the required credentials or sign up.";
+                                } else {
+                                    errorM = e.getMessage();
+                                }
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                                 builder.setMessage(errorM)
                                         .setTitle(R.string.login_error_title)
