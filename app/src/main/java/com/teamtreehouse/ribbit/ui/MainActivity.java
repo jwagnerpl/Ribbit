@@ -40,9 +40,11 @@ public class MainActivity extends FragmentActivity implements
     public static final int TAKE_VIDEO_REQUEST = 1;
     public static final int PICK_PHOTO_REQUEST = 2;
     public static final int PICK_VIDEO_REQUEST = 3;
+    public static final int COMPOSE_MESSAGE = 6;
 
     public static final int MEDIA_TYPE_IMAGE = 4;
     public static final int MEDIA_TYPE_VIDEO = 5;
+    public static final int MEDIA_TYPE_MESSAGE = 7;
 
     public static final int FILE_SIZE_LIMIT = 1024 * 1024 * 10; // 10 MB
 
@@ -90,6 +92,9 @@ public class MainActivity extends FragmentActivity implements
                             Toast.makeText(MainActivity.this, R.string.video_file_size_warning, Toast.LENGTH_LONG).show();
                             startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
                             break;
+                        case 6: // Compose message
+                            Intent composeTextMessageIntent = new Intent(MainActivity.this, ComposeMessage.class);
+                            startActivity(composeTextMessageIntent);
                     }
                 }
 

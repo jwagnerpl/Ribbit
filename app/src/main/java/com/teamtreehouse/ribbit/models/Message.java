@@ -27,6 +27,7 @@ public class Message implements Comparable<Message> {
 
     public static final String TYPE_IMAGE = "image";
     public static final String TYPE_VIDEO = "video";
+    public static final String TYPE_TEXT = "text";
 
     private UUID id;
     private Date createdAt;
@@ -78,7 +79,7 @@ public class Message implements Comparable<Message> {
     }
 
     public void saveInBackground(SaveCallback callback) {
-        MockMessages.getInstance    ().saveMessage(this);
+        MockMessages.getInstance().saveMessage(this);
         callback.done(null);
     }
 
