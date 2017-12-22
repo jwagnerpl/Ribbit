@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public static final int FILE_SIZE_LIMIT = 1024 * 1024 * 10; // 10 MB
 
-    protected Uri mMediaUri;
+    public static Uri mMediaUri;
 
     protected DialogInterface.OnClickListener mDialogListener =
             new DialogInterface.OnClickListener() {
@@ -62,12 +63,15 @@ public class MainActivity extends AppCompatActivity implements
                         case 0: // Take picture
                             Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             mMediaUri = omf.getOutputMediaFileUri(MainActivity.this,MEDIA_TYPE_IMAGE);
+
                             if (mMediaUri == null) {
                                 // display an error
                                 Toast.makeText(MainActivity.this, R.string.error_external_storage,
                                         Toast.LENGTH_LONG).show();
                             } else {
                                 takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+                                takePhotoIntent.putExtra("uri", mMediaUri);
+                                Log.d(TAG, mMediaUri + "first instance of media uRI");
                                 startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
                             }
                             break;
@@ -173,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "checking result code");
+        Log.d(TAG, "checking result code" + data.getData());
         if (resultCode == RESULT_OK) {
             Log.d(TAG, "result code is ok");
             if (requestCode == PICK_PHOTO_REQUEST || requestCode == PICK_VIDEO_REQUEST) {
@@ -181,9 +185,9 @@ public class MainActivity extends AppCompatActivity implements
                     Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_LONG).show();
                 } else {
                     mMediaUri = data.getData();
+                    Log.d(TAG,mMediaUri.toString() + "Here is the uri after data.getdata");
                 }
 
-                Log.i(TAG, "Media URI: " + mMediaUri);
                 if (requestCode == PICK_VIDEO_REQUEST) {
                     // make sure the file is less than 10 MB
                     int fileSize = 0;
@@ -212,14 +216,18 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             else {
+                mMediaUri = Uri.parse(data.getStringExtra("uri"));
+                Log.d(TAG, "mediaURI is here.");
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+
                 mediaScanIntent.setData(mMediaUri);
                 sendBroadcast(mediaScanIntent);
             }
 
-            Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
-            recipientsIntent.setData(mMediaUri);
 
+            Intent recipientsIntent = new Intent(getApplicationContext(), RecipientsActivity.class);
+            recipientsIntent.setData(mMediaUri);
+            Log.d(TAG, String.valueOf(requestCode) + " request code");
             String fileType = null;
             if (requestCode == PICK_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST) {
                 fileType = Message.TYPE_IMAGE;
@@ -227,8 +235,9 @@ public class MainActivity extends AppCompatActivity implements
                 fileType = Message.TYPE_VIDEO;
             }
 
-
             recipientsIntent.putExtra(Message.KEY_FILE_TYPE, fileType);
+            Log.d(TAG, mMediaUri + "here's the mediauri");
+            Log.d(TAG, "we are in the activity method");
             startActivity(recipientsIntent);
         } else if (resultCode != RESULT_CANCELED) {
             Toast.makeText(this, R.string.general_error, Toast.LENGTH_LONG).show();

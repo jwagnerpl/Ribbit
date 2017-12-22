@@ -71,7 +71,6 @@ public class RecipientsActivity extends Activity {
         mFileType = getIntent().getExtras().getString(Message.KEY_FILE_TYPE);
         messageText = getIntent().getStringExtra("message");
         messageFileType = getIntent().getStringExtra("KEY_FILE_TYPE");
-        Log.d(TAG, messageText + " here is the message text");
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override

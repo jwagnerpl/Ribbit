@@ -26,6 +26,7 @@ import com.teamtreehouse.ribbit.models.MessageFile;
 import com.teamtreehouse.ribbit.models.Query;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.callbacks.FindCallback;
+import com.teamtreehouse.ribbit.utils.OutputMediaFile;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,7 +53,7 @@ public class InboxFragment extends ListFragment {
 
     public static final int FILE_SIZE_LIMIT = 1024 * 1024 * 10; // 10 MB
 
-    protected Uri mMediaUri;
+    private Uri mMediaUri;
     protected List<Message> mMessages;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -102,7 +103,25 @@ public class InboxFragment extends ListFragment {
         final FloatingActionButton fab4 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB4);
         final FloatingActionButton fab5 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB5);
         FloatingActionButton fab6 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB6);
+        final OutputMediaFile omf = new OutputMediaFile();
 
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                mMediaUri = omf.getOutputMediaFileUri(getContext(),MEDIA_TYPE_IMAGE);
+                if (mMediaUri == null) {
+                    // display an error
+                    Toast.makeText(getContext(), R.string.error_external_storage,
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+                    takePhotoIntent.putExtra("uri", mMediaUri);
+                    Log.d(TAG, mMediaUri + "first instance of media uRI");
+                    getActivity().startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
+                }
+            }
+        });
 
         fab6.setOnClickListener(new View.OnClickListener() {
             @Override
