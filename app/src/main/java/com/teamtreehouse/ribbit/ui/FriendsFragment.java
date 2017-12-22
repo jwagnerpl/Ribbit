@@ -35,7 +35,6 @@ public class FriendsFragment extends Fragment {
                 container, false);
 
         mGridView = (GridView) rootView.findViewById(R.id.friendsGrid);
-
         TextView emptyTextView = (TextView) rootView.findViewById(android.R.id.empty);
         mGridView.setEmptyView(emptyTextView);
 
