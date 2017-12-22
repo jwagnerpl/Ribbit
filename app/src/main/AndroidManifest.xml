@@ -24,7 +24,9 @@
             android:name=".ui.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/Base.V7.Theme.AppCompat.Light">
+        </activity>
         <activity
             android:name=".ui.LoginActivity"
             android:label="@string/title_activity_login"

@@ -3,6 +3,8 @@ package com.teamtreehouse.ribbit.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.teamtreehouse.ribbit.R;
 import com.teamtreehouse.ribbit.adapters.MessageAdapter;
@@ -24,10 +27,32 @@ import com.teamtreehouse.ribbit.models.Query;
 import com.teamtreehouse.ribbit.models.User;
 import com.teamtreehouse.ribbit.models.callbacks.FindCallback;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 public class InboxFragment extends ListFragment {
 
+    public static final int TAKE_PHOTO_REQUEST = 0;
+    public static final int TAKE_VIDEO_REQUEST = 1;
+    public static final int PICK_PHOTO_REQUEST = 2;
+    public static final int PICK_VIDEO_REQUEST = 3;
+    public static final int COMPOSE_MESSAGE = 6;
+
+    public static final int MEDIA_TYPE_IMAGE = 4;
+    public static final int MEDIA_TYPE_VIDEO = 5;
+    public static final int MEDIA_TYPE_MESSAGE = 7;
+
+    public static final int FILE_SIZE_LIMIT = 1024 * 1024 * 10; // 10 MB
+
+    protected Uri mMediaUri;
     protected List<Message> mMessages;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -45,12 +70,14 @@ public class InboxFragment extends ListFragment {
         View rootView = inflater.inflate(R.layout.fragment_inbox,
                 container, false);
 
+
         return rootView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeRefreshLayout);
         Log.d(TAG, mSwipeRefreshLayout.toString());
@@ -68,6 +95,36 @@ public class InboxFragment extends ListFragment {
         if (User.getCurrentUser() != null) {
             retrieveMessages();
         }
+
+        final FloatingActionButton fab1 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB1);
+        final FloatingActionButton fab2 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB2);
+        final FloatingActionButton fab3 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB3);
+        final FloatingActionButton fab4 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB4);
+        final FloatingActionButton fab5 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB5);
+        FloatingActionButton fab6 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB6);
+
+
+        fab6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(fab1.getVisibility() == View.INVISIBLE){
+                fab1.setVisibility(View.VISIBLE);
+                fab2.setVisibility(View.VISIBLE);
+                fab3.setVisibility(View.VISIBLE);
+                fab4.setVisibility(View.VISIBLE);
+                fab5.setVisibility(View.VISIBLE);}
+
+                else{
+                    fab1.setVisibility(View.INVISIBLE);
+                    fab2.setVisibility(View.INVISIBLE);
+                    fab3.setVisibility(View.INVISIBLE);
+                    fab4.setVisibility(View.INVISIBLE);
+                    fab5.setVisibility(View.INVISIBLE);
+                }
+            }
+
+        });
+
     }
 
     @Override
@@ -182,7 +239,9 @@ public class InboxFragment extends ListFragment {
             retrieveMessages();
         }
     };
+
 }
+
 
 
 

@@ -185,6 +185,7 @@ public class RecipientsActivity extends Activity {
             return message;
         } else {
             if (mFileType.equals(Message.TYPE_IMAGE)) {
+                Log.d(TAG, fileBytes.toString());
                 fileBytes = FileHelper.reduceImageForUpload(fileBytes);
             }
 

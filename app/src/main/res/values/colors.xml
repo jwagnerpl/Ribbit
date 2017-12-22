@@ -12,4 +12,11 @@
     <color name="swipeRefresh3">#dcadf4</color>
     <color name="swipeRefresh4">#ad78d9</color>
     <color name="white">#f3f1f4</color>
+    <color name="fab1">#23b380</color>
+    <color name="fab2">#7c0eb3</color>
+    <color name="fab3">#7692f4</color>
+    <color name="fab4">#c461f5</color>
+    <color name="fab5">#efef36</color>
+    <color name="fab6">#ed1d51</color>
+
 </resources>
