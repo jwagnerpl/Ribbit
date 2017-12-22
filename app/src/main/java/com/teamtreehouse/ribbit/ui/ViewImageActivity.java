@@ -1,16 +1,20 @@
 package com.teamtreehouse.ribbit.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.teamtreehouse.ribbit.R;
+
+import org.w3c.dom.Text;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -24,13 +28,21 @@ public class ViewImageActivity extends Activity {
         // Show the Up button in the action bar.
         setupActionBar();
 
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
-
-        Uri imageUri = getIntent().getData();
 
         final TextView timerTextView = (TextView) findViewById(R.id.timer);
 
-        Picasso.with(this).load(imageUri.toString()).into(imageView);
+        if(getIntent().getStringExtra("type").equals("photo")) {
+            ImageView imageView = (ImageView) findViewById(R.id.imageView);
+            Uri imageUri = getIntent().getData();
+            Picasso.with(this).load(imageUri.toString()).into(imageView);
+        }
+
+        else{
+            String msgText = getIntent().getStringExtra("messageText");
+            TextView msgView = (TextView) findViewById(R.id.messageTextView);
+            msgView.setVisibility(View.VISIBLE);
+            msgView.setText(msgText);
+        }
 
         CountDownTimer cdt = new CountDownTimer(10000, 1000) {
 

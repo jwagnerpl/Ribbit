@@ -33,6 +33,7 @@ import com.teamtreehouse.ribbit.utils.FileHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RecipientsActivity extends Activity {
 
@@ -45,6 +46,9 @@ public class RecipientsActivity extends Activity {
     protected String mFileType;
     protected GridView mGridView;
     protected Button sendButton;
+    byte[] fileBytes;
+    private String messageFileType;
+    private String messageText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +69,14 @@ public class RecipientsActivity extends Activity {
 
         mMediaUri = getIntent().getData();
         mFileType = getIntent().getExtras().getString(Message.KEY_FILE_TYPE);
+        messageText = getIntent().getStringExtra("message");
+        messageFileType = getIntent().getStringExtra("KEY_FILE_TYPE");
+        Log.d(TAG, messageText + " here is the message text");
 
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Message message = createMessage();
+                Message message = createMessage(messageFileType, messageText);
                 if (message == null) {
                     // error
                     AlertDialog.Builder builder = new AlertDialog.Builder(RecipientsActivity.this);
@@ -157,19 +164,27 @@ public class RecipientsActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected Message createMessage() {
+    protected Message createMessage(String fileType, String msg) {
         Message message = new Message(Message.class.getSimpleName());
+        message.setMessageText(msg);
         message.put(Message.KEY_SENDER_ID, User.getCurrentUser().getObjectId());
         message.put(Message.KEY_SENDER_NAME, User.getCurrentUser().getUsername());
         message.put(Message.KEY_RECIPIENT_IDS, getRecipientIds());
         message.put(Message.KEY_FILE_TYPE, mFileType);
+        if(!Objects.equals(messageFileType, "text")) {
 
-        byte[] fileBytes = FileHelper.getByteArrayFromFile(this, mMediaUri);
+            fileBytes = FileHelper.getByteArrayFromFile(this, mMediaUri);
+        }
+
+        else {
+            fileBytes = null;
+        }
 
         if (fileBytes == null) {
-            return null;
+            message.put(Message.TYPE_TEXT, "hello");
+            return message;
         } else {
-            if (mFileType.toString().equals(Message.TYPE_IMAGE.toString())) {
+            if (mFileType.equals(Message.TYPE_IMAGE)) {
                 fileBytes = FileHelper.reduceImageForUpload(fileBytes);
             }
 

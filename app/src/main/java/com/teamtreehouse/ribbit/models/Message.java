@@ -25,13 +25,16 @@ public class Message implements Comparable<Message> {
     public static final String KEY_CREATED_AT = "createdAt";
     private static final String TAG = "Message";
 
+
     public static final String TYPE_IMAGE = "image";
     public static final String TYPE_VIDEO = "video";
+    public static final String TYPE_TEXT = "text";
 
     private UUID id;
     private Date createdAt;
     private MessageFile messageFile;
     private HashMap<String, Object> map;
+    private String messageText;
 
     public Message(String className) {
         id = UUID.randomUUID();
@@ -45,6 +48,14 @@ public class Message implements Comparable<Message> {
 
     public UUID getId() {
         return id;
+    }
+
+    public String getMessageText() {
+        return messageText;
+    }
+
+    public void setMessageText(String messageText) {
+        this.messageText = messageText;
     }
 
     public Date getCreatedAt() {
@@ -78,7 +89,7 @@ public class Message implements Comparable<Message> {
     }
 
     public void saveInBackground(SaveCallback callback) {
-        MockMessages.getInstance    ().saveMessage(this);
+        MockMessages.getInstance().saveMessage(this);
         callback.done(null);
     }
 

@@ -32,9 +32,6 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         Log.d(TAG, "we are here in login activity");
 
-        ActionBar actionBar = getActionBar();
-        actionBar.hide();
-
         mSignUpTextView = (TextView) findViewById(R.id.signUpText);
         mSignUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,8 +77,11 @@ public class LoginActivity extends Activity {
                                 startActivity(intent);
                             } else {
                                 String errorM;
-                                if(e.getMessage() == null){errorM = "Try logging in again with the required credentials or sign up.";}
-                                else{errorM = e.getMessage();}
+                                if (e.getMessage() == null) {
+                                    errorM = "Try logging in again with the required credentials or sign up.";
+                                } else {
+                                    errorM = e.getMessage();
+                                }
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                                 builder.setMessage(errorM)
                                         .setTitle(R.string.login_error_title)

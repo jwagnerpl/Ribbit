@@ -3,9 +3,11 @@ package com.teamtreehouse.ribbit.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +32,8 @@ public class InboxFragment extends ListFragment {
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
     private static final String TAG = "InboxFragment";
+    private FloatingActionButton fab;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -48,7 +52,6 @@ public class InboxFragment extends ListFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeRefreshLayout);
         Log.d(TAG, mSwipeRefreshLayout.toString());
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
@@ -62,7 +65,9 @@ public class InboxFragment extends ListFragment {
                 R.color.swipeRefresh4
         );
 
-        if(User.getCurrentUser() != null) {retrieveMessages();}
+        if (User.getCurrentUser() != null) {
+            retrieveMessages();
+        }
     }
 
     @Override
@@ -74,7 +79,9 @@ public class InboxFragment extends ListFragment {
 
     private void retrieveMessages() {
         Query<Message> query = Message.getQuery();
-        if(mSwipeRefreshLayout == null){mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeRefreshLayout);}
+        if (mSwipeRefreshLayout == null) {
+            mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeRefreshLayout);
+        }
         query.whereEqualTo(Message.KEY_RECIPIENT_IDS, User.getCurrentUser().getObjectId());
         query.addDescendingOrder(Message.KEY_CREATED_AT);
         query.findInBackground(new FindCallback<Message>() {
@@ -117,17 +124,29 @@ public class InboxFragment extends ListFragment {
         Message message = mMessages.get(position);
         String messageType = message.getString(Message.KEY_FILE_TYPE);
         MessageFile file = message.getFile(Message.KEY_FILE);
-        Uri fileUri = file.getUri();
+        Uri fileUri;
 
-        if (messageType.equals(Message.TYPE_IMAGE)) {
-            // view the image
-            Intent intent = new Intent(getActivity(), ViewImageActivity.class);
-            intent.setData(fileUri);
-            startActivity(intent);
+        if (file != null) {
+            fileUri = file.getUri();
+            if (messageType.equals(Message.TYPE_IMAGE)) {
+                // view the image
+                Intent intent = new Intent(getActivity(), ViewImageActivity.class);
+                intent.setData(fileUri);
+                intent.putExtra("type", "photo");
+                startActivity(intent);
+            } else if (messageType.equals(Message.TYPE_VIDEO)) {
+                // view the video
+                Intent intent = new Intent(Intent.ACTION_VIEW, fileUri);
+                intent.putExtra("type", "video");
+                intent.setDataAndType(fileUri, "video/*");
+                startActivity(intent);
+            }
+
         } else {
-            // view the video
-            Intent intent = new Intent(Intent.ACTION_VIEW, fileUri);
-            intent.setDataAndType(fileUri, "video/*");
+            Log.d(TAG, "I am going to compose a message");
+            Intent intent = new Intent(getActivity(), ViewImageActivity.class);
+            intent.putExtra("messageText", message.getMessageText());
+            intent.putExtra("type", "text");
             startActivity(intent);
         }
 
@@ -145,8 +164,7 @@ public class InboxFragment extends ListFragment {
             //message.removeRecipient(User.getCurrentUser().getObjectId());
 
 
-        }
-        else {
+        } else {
             // remove the recipient
             message.deleteInBackground();
             MessageAdapter adapter = (MessageAdapter) getListView().getAdapter();
