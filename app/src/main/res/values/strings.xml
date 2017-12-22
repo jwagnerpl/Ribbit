@@ -24,7 +24,7 @@
     <string name="menu_edit_friends_label">Edit Friends</string>
     <string name="title_activity_edit_friends">Edit Friends</string>
     <string name="error_title">We\'re sorry!</string>
-    <string name="menu_camera_label">Camera</string>
+    <string name="menu_camera_label">Create Message</string>
     <string name="error_external_storage">There was a problem accessing your device\'s external storage.</string>
     <string name="general_error">Sorry, there was an error!</string>
     <string name="video_size_limit_warning">The selected video must be less than 10 MB.</string>
@@ -36,6 +36,7 @@
         <item>Take Video</item>
         <item>Choose Picture</item>
         <item>Choose Video</item>
+        <item>Compose Message</item>
     </string-array>
 
     <string name="video_file_size_warning">The selected video must be less than 10 MB.</string>

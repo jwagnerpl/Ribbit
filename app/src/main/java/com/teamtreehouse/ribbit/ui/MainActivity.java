@@ -92,8 +92,8 @@ public class MainActivity extends FragmentActivity implements
                             Toast.makeText(MainActivity.this, R.string.video_file_size_warning, Toast.LENGTH_LONG).show();
                             startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
                             break;
-                        case 6: // Compose message
-                            Intent composeTextMessageIntent = new Intent(MainActivity.this, ComposeMessage.class);
+                        case 4: // Compose message
+                            Intent composeTextMessageIntent = new Intent(MainActivity.this, ComposeMessageActivity.class);
                             startActivity(composeTextMessageIntent);
                     }
                 }

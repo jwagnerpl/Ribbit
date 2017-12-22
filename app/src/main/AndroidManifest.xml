@@ -69,7 +69,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.teamtreehouse.ribbit.ui.MainActivity" />
         </activity>
-        <activity android:name=".ui.ComposeMessage"></activity>
+        <activity android:name=".ui.ComposeMessageActivity"></activity>
     </application>
 
 </manifest>
