@@ -1,7 +1,6 @@
 package com.teamtreehouse.ribbit.ui;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -31,13 +30,11 @@ public class ViewImageActivity extends Activity {
 
         final TextView timerTextView = (TextView) findViewById(R.id.timer);
 
-        if(getIntent().getStringExtra("type").equals("photo")) {
+        if (getIntent().getStringExtra("type").equals("photo")) {
             ImageView imageView = (ImageView) findViewById(R.id.imageView);
             Uri imageUri = getIntent().getData();
             Picasso.with(this).load(imageUri.toString()).into(imageView);
-        }
-
-        else{
+        } else {
             String msgText = getIntent().getStringExtra("messageText");
             TextView msgView = (TextView) findViewById(R.id.messageTextView);
             msgView.setVisibility(View.VISIBLE);
@@ -66,7 +63,6 @@ public class ViewImageActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
-
 
 
     @Override

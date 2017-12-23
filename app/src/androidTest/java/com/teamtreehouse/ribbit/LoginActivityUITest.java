@@ -69,7 +69,7 @@ public class LoginActivityUITest {
 
         // Assert
 
-        onView(withText("Try logging in again with the required credentials or sign up.")).check(matches(isDisplayed()));
+        onView(withText("Try entering the correct login details to proceed.")).check(matches(isDisplayed()));
     }
 
     @Test
@@ -101,7 +101,7 @@ public class LoginActivityUITest {
 
         // Assert
 
-        onView(withText("Try logging in again with the required credentials or sign up.")).check(matches(isDisplayed()));
+        onView(withText("Try entering the correct login details to proceed.")).check(matches(isDisplayed()));
     }
 
 }

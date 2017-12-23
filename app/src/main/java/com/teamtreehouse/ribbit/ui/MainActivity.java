@@ -7,10 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,13 +25,9 @@ import com.teamtreehouse.ribbit.utils.OutputMediaFile;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements
         ActionBar.TabListener {
@@ -50,9 +44,12 @@ public class MainActivity extends AppCompatActivity implements
     public static final int MEDIA_TYPE_VIDEO = 5;
     public static final int MEDIA_TYPE_MESSAGE = 7;
 
+
     public static final int FILE_SIZE_LIMIT = 1024 * 1024 * 10; // 10 MB
 
     public static Uri mMediaUri;
+
+    final OutputMediaFile omf = new OutputMediaFile();
 
     protected DialogInterface.OnClickListener mDialogListener =
             new DialogInterface.OnClickListener() {
@@ -62,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements
                     switch (which) {
                         case 0: // Take picture
                             Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            mMediaUri = omf.getOutputMediaFileUri(MainActivity.this,MEDIA_TYPE_IMAGE);
+                            mMediaUri = omf.getOutputMediaFileUri(MainActivity.this, MEDIA_TYPE_IMAGE);
 
                             if (mMediaUri == null) {
                                 // display an error
@@ -70,14 +67,13 @@ public class MainActivity extends AppCompatActivity implements
                                         Toast.LENGTH_LONG).show();
                             } else {
                                 takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
-                                takePhotoIntent.putExtra("uri", mMediaUri);
                                 Log.d(TAG, mMediaUri + "first instance of media uRI");
                                 startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
                             }
                             break;
                         case 1: // Take video
                             Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                            mMediaUri = omf.getOutputMediaFileUri(MainActivity.this,MEDIA_TYPE_VIDEO);
+                            mMediaUri = omf.getOutputMediaFileUri(MainActivity.this, MEDIA_TYPE_VIDEO);
                             if (mMediaUri == null) {
                                 // display an error
                                 Toast.makeText(MainActivity.this, R.string.error_external_storage,
@@ -105,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements
                             startActivity(composeTextMessageIntent);
                     }
                 }
-    };
+            };
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -128,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         JodaTimeAndroid.init(this);
+
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -154,30 +151,12 @@ public class MainActivity extends AppCompatActivity implements
             // Set up the ViewPager with the sections adapter.
             mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mSectionsPagerAdapter);
-            //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-
-            // When swiping between different sections, select the corresponding
-            // tab. We can also use ActionBar.Tab#select() to do this if we have
-            // a reference to the Tab.
-
-            // For each of the sections in the app, add a tab to the action bar.
-//            for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-//                // Create a tab with text corresponding to the page title defined by
-//                // the adapter. Also specify this Activity object, which implements
-//                // the TabListener interface, as the callback (listener) for when
-//                // this tab is selected.
-//                actionBar.addTab(actionBar.newTab()
-//                        .setIcon(mSectionsPagerAdapter.getIcon(i))
-//                        .setTabListener(this));
-//            }
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "checking result code" + data.getData());
         if (resultCode == RESULT_OK) {
             Log.d(TAG, "result code is ok");
             if (requestCode == PICK_PHOTO_REQUEST || requestCode == PICK_VIDEO_REQUEST) {
@@ -185,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements
                     Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_LONG).show();
                 } else {
                     mMediaUri = data.getData();
-                    Log.d(TAG,mMediaUri.toString() + "Here is the uri after data.getdata");
                 }
 
                 if (requestCode == PICK_VIDEO_REQUEST) {
@@ -213,10 +191,8 @@ public class MainActivity extends AppCompatActivity implements
                         return;
                     }
                 }
-            }
 
-            else {
-                mMediaUri = Uri.parse(data.getStringExtra("uri"));
+            } else {
                 Log.d(TAG, "mediaURI is here.");
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 
@@ -236,8 +212,6 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             recipientsIntent.putExtra(Message.KEY_FILE_TYPE, fileType);
-            Log.d(TAG, mMediaUri + "here's the mediauri");
-            Log.d(TAG, "we are in the activity method");
             startActivity(recipientsIntent);
         } else if (resultCode != RESULT_CANCELED) {
             Toast.makeText(this, R.string.general_error, Toast.LENGTH_LONG).show();

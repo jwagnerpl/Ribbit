@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity$DummySectionFragment" >
+    android:animateLayoutChanges="true"
+    tools:context="ui.MainActivity" >
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
@@ -30,7 +31,6 @@
         android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/empty_inbox_label" />
 
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,67 +40,71 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/performActionFAB1"
-            android:visibility="invisible"
-            app:fabSize="mini"
-            android:backgroundTint="@color/fab1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            android:tint="@color/whitey"
             android:layout_marginEnd="16dp"
-            app:srcCompat="@drawable/ic_add_black_24dp" />
+            android:backgroundTint="@color/fab1"
+            android:visibility="invisible"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_photo_camera_black_24dp" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/performActionFAB2"
-            app:fabSize="mini"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:backgroundTint="@color/fab2"
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
-            app:srcCompat="@drawable/ic_add_black_24dp" />
+            android:tint="@color/whitey"
+            android:backgroundTint="@color/fab2"
+            android:visibility="invisible"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_videocam_black_24dp" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/performActionFAB3"
-            android:visibility="invisible"
-            app:fabSize="mini"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/fab3"
             android:layout_marginEnd="16dp"
-            app:srcCompat="@drawable/ic_add_black_24dp" />
+            android:backgroundTint="@color/fab3"
+            android:visibility="invisible"
+            android:tint="@color/whitey"            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_photo_library_black_24dp" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/performActionFAB4"
-            android:visibility="invisible"
-            app:fabSize="mini"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:tint="@color/whitey"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/fab4"
             android:layout_marginEnd="16dp"
-            app:srcCompat="@drawable/ic_add_black_24dp" />
+            android:backgroundTint="@color/fab4"
+            android:visibility="invisible"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_video_library_black_24dp" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/performActionFAB5"
-            app:fabSize="mini"
-            android:visibility="invisible"
-            android:backgroundTint="@color/fab5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
-            app:srcCompat="@drawable/ic_add_black_24dp" />
+            android:backgroundTint="@color/fab5"
+            android:visibility="invisible"
+            android:tint="@color/whitey"            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_message_black_24dp" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/performActionFAB6"
-            app:fabSize="auto"
-            android:backgroundTint="@color/fab6"
             android:layout_width="match_parent"
+            android:tint="@color/whitey"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/fab6"
+            app:fabSize="auto"
             app:srcCompat="@drawable/ic_add_black_24dp" />
     </LinearLayout>
 

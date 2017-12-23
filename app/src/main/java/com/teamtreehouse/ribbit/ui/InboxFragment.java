@@ -3,18 +3,15 @@ package com.teamtreehouse.ribbit.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -53,6 +50,13 @@ public class InboxFragment extends ListFragment {
 
     public static final int FILE_SIZE_LIMIT = 1024 * 1024 * 10; // 10 MB
 
+    FloatingActionButton fab1;
+    FloatingActionButton fab2;
+    FloatingActionButton fab3;
+    FloatingActionButton fab4;
+    FloatingActionButton fab5;
+    FloatingActionButton fab6;
+
     private Uri mMediaUri;
     protected List<Message> mMessages;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
@@ -64,10 +68,6 @@ public class InboxFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
-        //mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipeRefreshLayout);
-        //Log.d(TAG, User.getCurrentUser().toString());
-        //if(User.getCurrentUser() == null){startActivity(new Intent(getContext(), LoginActivity.class));}
         View rootView = inflater.inflate(R.layout.fragment_inbox,
                 container, false);
 
@@ -84,8 +84,6 @@ public class InboxFragment extends ListFragment {
         Log.d(TAG, mSwipeRefreshLayout.toString());
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
 
-        // Deprecated method - what should we call instead?
-
         mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.swipeRefresh1,
                 R.color.swipeRefresh2,
@@ -97,43 +95,94 @@ public class InboxFragment extends ListFragment {
             retrieveMessages();
         }
 
-        final FloatingActionButton fab1 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB1);
-        final FloatingActionButton fab2 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB2);
-        final FloatingActionButton fab3 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB3);
-        final FloatingActionButton fab4 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB4);
-        final FloatingActionButton fab5 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB5);
-        FloatingActionButton fab6 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB6);
+        fab1 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB1);
+        fab2 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB2);
+        fab3 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB3);
+        fab4 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB4);
+        fab5 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB5);
+        fab6 = (FloatingActionButton) getView().findViewById(R.id.performActionFAB6);
         final OutputMediaFile omf = new OutputMediaFile();
 
+        fab1.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Toast.makeText(view.getContext(), "Take a picture", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                mMediaUri = omf.getOutputMediaFileUri(getContext(),MEDIA_TYPE_IMAGE);
-                if (mMediaUri == null) {
+                MainActivity.mMediaUri = omf.getOutputMediaFileUri(getContext(), MEDIA_TYPE_IMAGE);
+                if (MainActivity.mMediaUri == null) {
                     // display an error
                     Toast.makeText(getContext(), R.string.error_external_storage,
                             Toast.LENGTH_LONG).show();
                 } else {
-                    takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
-                    takePhotoIntent.putExtra("uri", mMediaUri);
-                    Log.d(TAG, mMediaUri + "first instance of media uRI");
+                    takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, MainActivity.mMediaUri);
+                    takePhotoIntent.putExtra("uri", MainActivity.mMediaUri);
                     getActivity().startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
                 }
+            }
+        });
+
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent videoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                MainActivity.mMediaUri = omf.getOutputMediaFileUri(getContext(), MEDIA_TYPE_VIDEO);
+                if (MainActivity.mMediaUri == null) {
+                    // display an error
+                    Toast.makeText(getContext(), R.string.error_external_storage,
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    videoIntent.putExtra(MediaStore.EXTRA_OUTPUT, MainActivity.mMediaUri);
+                    videoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
+                    videoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0); // 0 = lowest res
+                    startActivityForResult(videoIntent, TAKE_VIDEO_REQUEST);
+                }
+            }
+        });
+
+        fab3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                choosePhotoIntent.setType("image/*");
+                startActivityForResult(choosePhotoIntent, PICK_PHOTO_REQUEST);
+            }
+        });
+
+        fab4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                chooseVideoIntent.setType("video/*");
+                Toast.makeText(getContext(), R.string.video_file_size_warning, Toast.LENGTH_LONG).show();
+                startActivityForResult(chooseVideoIntent, PICK_VIDEO_REQUEST);
+            }
+        });
+
+        fab5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent composeTextMessageIntent = new Intent(getContext(), ComposeMessageActivity.class);
+                startActivity(composeTextMessageIntent);
             }
         });
 
         fab6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(fab1.getVisibility() == View.INVISIBLE){
-                fab1.setVisibility(View.VISIBLE);
-                fab2.setVisibility(View.VISIBLE);
-                fab3.setVisibility(View.VISIBLE);
-                fab4.setVisibility(View.VISIBLE);
-                fab5.setVisibility(View.VISIBLE);}
-
-                else{
+                if (fab1.getVisibility() == View.INVISIBLE) {
+                    fab1.setVisibility(View.VISIBLE);
+                    fab2.setVisibility(View.VISIBLE);
+                    fab3.setVisibility(View.VISIBLE);
+                    fab4.setVisibility(View.VISIBLE);
+                    fab5.setVisibility(View.VISIBLE);
+                } else {
                     fab1.setVisibility(View.INVISIBLE);
                     fab2.setVisibility(View.INVISIBLE);
                     fab3.setVisibility(View.INVISIBLE);

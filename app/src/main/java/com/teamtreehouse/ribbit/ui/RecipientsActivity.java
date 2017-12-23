@@ -68,6 +68,7 @@ public class RecipientsActivity extends Activity {
         mGridView.setEmptyView(emptyTextView);
 
         mMediaUri = getIntent().getData();
+        Log.d(TAG, mMediaUri + "here is the uri in recipient activity");
         mFileType = getIntent().getExtras().getString(Message.KEY_FILE_TYPE);
         messageText = getIntent().getStringExtra("message");
         messageFileType = getIntent().getStringExtra("KEY_FILE_TYPE");
@@ -171,8 +172,7 @@ public class RecipientsActivity extends Activity {
         message.put(Message.KEY_RECIPIENT_IDS, getRecipientIds());
         message.put(Message.KEY_FILE_TYPE, mFileType);
         if(!Objects.equals(messageFileType, "text")) {
-
-            fileBytes = FileHelper.getByteArrayFromFile(this, mMediaUri);
+            fileBytes = FileHelper.getByteArrayFromFile(this, MainActivity.mMediaUri);
         }
 
         else {
@@ -180,12 +180,12 @@ public class RecipientsActivity extends Activity {
         }
 
         if (fileBytes == null) {
-            message.put(Message.TYPE_TEXT, "hello");
             return message;
-        } else {
+        }
+
+        else {
             if (mFileType.equals(Message.TYPE_IMAGE)) {
-                Log.d(TAG, fileBytes.toString());
-                fileBytes = FileHelper.reduceImageForUpload(fileBytes);
+                fileBytes = FileHelper.reduceImageForUpload(FileHelper.getByteArrayFromFile(this, MainActivity.mMediaUri));
             }
 
             String fileName = FileHelper.getFileName(this, mMediaUri, mFileType);
